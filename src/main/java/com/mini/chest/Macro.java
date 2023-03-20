@@ -18,6 +18,19 @@ import org.lwjgl.glfw.GLFW;
 public class Macro {
     private boolean isRunningMacro = false;
     private boolean temp = false;
+
+    private int currentIndex = 0;
+    private final Click[] clicks = {
+            new Click(4),
+            new Click(22),
+            new Click(25),
+            new Click(13),
+            new Click(44),
+            new Click(35),
+            new Click(4, ClickType.RIGHT_CLICK),
+            new Click(22),
+            new Click(35)};
+
     private static KeyBinding keyBinding;
 
     public Macro() {
@@ -49,25 +62,15 @@ public class Macro {
         if (!temp) {
             // Open pearl section
             slotClick(screenHandler, 13, ClickType.LEFT_CLICK);
+            currentIndex = 0;
             temp = true;
         }
 
-        // Buy pearls
-        slotClick(screenHandler, 4, ClickType.LEFT_CLICK);
-        slotClick(screenHandler, 22, ClickType.LEFT_CLICK);
-        slotClick(screenHandler, 25, ClickType.LEFT_CLICK);
-        slotClick(screenHandler, 13, ClickType.LEFT_CLICK);
+        // Execute next click
+        slotClick(screenHandler, clicks[currentIndex].slot, clicks[currentIndex].type);
+        currentIndex++;
+        if (currentIndex >= clicks.length) currentIndex = 0;
 
-        // Navigate back
-        slotClick(screenHandler, 44, ClickType.LEFT_CLICK);
-        slotClick(screenHandler, 35, ClickType.LEFT_CLICK);
-
-        // Sell pearls
-        slotClick(screenHandler, 4, ClickType.RIGHT_CLICK);
-        slotClick(screenHandler, 22, ClickType.LEFT_CLICK);
-
-        // Navigate back
-        slotClick(screenHandler, 35, ClickType.LEFT_CLICK);
     }
 
     private void slotClick(ScreenHandler screenHandler, int slotIndex, int clickType) {
